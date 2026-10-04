@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FitFriend - Simple Workout & Healthy Food App</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- App Header -->
+  <header class="app-header">
+    <div class="header-container">
+      <div class="brand-wrapper">
+        <div class="brand-icon">⚡</div>
+        <div>
+          <div class="brand-title">FitFriend</div>
+          <div class="brand-subtitle">Simple Exercise & Food Guide</div>
+        </div>
+      </div>
+      <div class="header-actions">
+        <div class="streak-pill" title="Daily streak">
+          <span>🔥</span> <span id="streakCount">1</span> Day Streak
+        </div>
+        <button id="themeToggleBtn" class="theme-btn" title="Toggle dark/light mode">🌙</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Navigation Bar -->
+  <nav class="nav-bar">
+    <div class="nav-container">
+      <button class="nav-tab active" data-tab="tab-today">📋 Today's Plan</button>
+      <button class="nav-tab" data-tab="tab-workouts">🏋️ Workouts</button>
+      <button class="nav-tab" data-tab="tab-food">🥗 Food Menu</button>
+      <button class="nav-tab" data-tab="tab-guide">🚦 What to Eat</button>
+      <button class="nav-tab" data-tab="tab-recipes">🍲 Quick Recipes</button>
+      <button class="nav-tab" data-tab="tab-profile">⚙️ Friend Profile</button>
+    </div>
+  </nav>
+
+  <!-- Main Container -->
+  <main class="main-wrapper">
+
+    <!-- TAB 1: TODAY'S PLAN -->
+    <section id="tab-today" class="tab-pane active">
+      <div class="welcome-banner">
+        <h1 class="welcome-title">Hey <span id="welcomeFriendName">Friend</span>! Ready for today? 💪</h1>
+        <p class="welcome-subtitle">Stay consistent with simple movements and clean food. Small daily steps lead to amazing results!</p>
+        <div class="quote-box">
+          <span>✨</span> <span id="dailyQuote">You don't have to be extreme, just consistent.</span>
+        </div>
+      </div>
+
+      <!-- Quick Recommended Workout Banner -->
+      <div class="card" style="border-left: 5px solid var(--primary); background: linear-gradient(to right, rgba(16,185,129,0.06), var(--card-bg));">
+        <div class="card-header">
+          <div>
+            <span class="badge badge-green">Today's Featured Workout</span>
+            <h2 class="card-title" style="margin-top: 4px;" id="todayWorkoutTitle">Beginner Full-Body (Home)</h2>
+            <p style="font-size: 0.85rem; color: var(--text-muted);" id="todayWorkoutDesc">15-20 mins • No equipment required • Gentle & energizing</p>
+          </div>
+          <button id="btnStartTodayWorkout" class="btn btn-primary btn-lg">
+            ▶️ Start Routine
+          </button>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <!-- Daily Water Tracker -->
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title">💧 Daily Water Tracker</h2>
+            <button id="btnResetWater" class="btn btn-outline btn-sm">Reset</button>
+          </div>
+          <p style="font-size: 0.85rem; color: var(--text-muted);">
+            Tap each cup when you drink a glass of water (~250ml). Staying hydrated boosts energy and metabolism!
+          </p>
+          <div class="water-cups" id="waterCupsContainer">
+            <!-- 8 cups generated via JS -->
+          </div>
+          <div class="water-stats">
+            <span id="waterCountText">0 / 8 glasses (0.0 L)</span>
+            <span id="waterGoalStatus" style="font-weight: 600; color: var(--blue);">Keep drinking!</span>
+          </div>
+        </div>
+
+        <!-- Today's Habits Checklist -->
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title">✅ Daily Checklist</h2>
+            <button id="btnResetChecklist" class="btn btn-outline btn-sm">Reset</button>
+          </div>
+          <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 12px;">
+            Check off your healthy milestones as you complete them:
+          </p>
+          <div id="checklistItems">
+            <!-- Checklist items rendered by JS -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Friend's Energy & Note -->
+      <div class="card">
+        <div class="card-header">
+          <h2 class="card-title">💬 Friend's Daily Note & Motivation</h2>
+        </div>
+        <p id="friendPersonalNoteDisplay" style="font-size: 0.95rem; font-style: italic; color: var(--text-muted); margin-bottom: 12px;">
+          "Remember to drink water, stretch after workouts, and stay consistent!"
+        </p>
+        <div style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center;">
+          <span style="font-size: 0.85rem; font-weight: 600;">How are you feeling today?</span>
+          <button class="btn btn-outline btn-sm mood-btn" data-mood="High Energy ⚡">⚡ Energetic</button>
+          <button class="btn btn-outline btn-sm mood-btn" data-mood="Feeling Good 😊">😊 Good</button>
+          <button class="btn btn-outline btn-sm mood-btn" data-mood="Taking it Easy 🧘">🧘 Gentle</button>
+          <span id="selectedMoodBadge" class="badge badge-orange" style="display: none;"></span>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 2: WORKOUTS & EXERCISES -->
+    <section id="tab-workouts" class="tab-pane">
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <h2 class="card-title">🏋️ Workout Routines</h2>
+            <p style="font-size: 0.85rem; color: var(--text-muted);">
+              Simple, home-friendly workouts designed for beginners and busy days.
+            </p>
+          </div>
+          <button id="btnOpenCustomExerciseModal" class="btn btn-primary btn-sm">+ Add Exercise</button>
+        </div>
+
+        <!-- Workout Filter Buttons -->
+        <div class="goal-pills" id="workoutFilters">
+          <button class="goal-pill active" data-filter="all">All Routines</button>
+          <button class="goal-pill" data-filter="Beginner">Beginner Friendly</button>
+          <button class="goal-pill" data-filter="Cardio">Fat Burn / Cardio</button>
+          <button class="goal-pill" data-filter="Intermediate">Tone & Strength</button>
+          <button class="goal-pill" data-filter="Relaxing">Stretches</button>
+        </div>
+
+        <!-- Workout Routines List -->
+        <div id="workoutCardsList">
+          <!-- Rendered by JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 3: FOOD MENU -->
+    <section id="tab-food" class="tab-pane">
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <h2 class="card-title">🥗 Daily Food Menu & What to Eat</h2>
+            <p style="font-size: 0.85rem; color: var(--text-muted);">
+              Healthy, tasty, and simple meal ideas for your friend based on their goal.
+            </p>
+          </div>
+          <button id="btnOpenCustomMealModal" class="btn btn-primary btn-sm">+ Add Custom Meal</button>
+        </div>
+
+        <!-- Goal Selection for Food -->
+        <div class="goal-pills" id="dietGoalPills">
+          <button class="goal-pill active" data-goal="balanced">🥗 Balanced & Fit</button>
+          <button class="goal-pill" data-goal="weight_loss">🔥 Fat Loss / Lean</button>
+          <button class="goal-pill" data-goal="muscle_strength">💪 Muscle & Tone</button>
+          <button class="goal-pill" data-goal="vegetarian">🌱 100% Vegetarian</button>
+        </div>
+
+        <!-- Goal description header -->
+        <div id="dietHeaderInfo" style="margin-bottom: 16px; padding: 12px; background: rgba(16, 185, 129, 0.08); border-radius: var(--radius-sm);">
+          <h3 id="dietHeaderTitle" style="font-size: 1.05rem; font-weight: 700; color: var(--primary-dark);">Balanced & Healthy Life</h3>
+          <p id="dietHeaderSub" style="font-size: 0.85rem; color: var(--text-muted);">Simple, wholesome everyday eating for great energy and fitness</p>
+        </div>
+
+        <!-- 4 Meals Grid (Breakfast, Lunch, Snack, Dinner) -->
+        <div class="meal-cards-grid" id="mealCardsContainer">
+          <!-- Rendered by JS -->
+        </div>
+
+        <!-- Custom Meals Added by User -->
+        <div id="customMealsSection" style="display: none; margin-top: 16px; border-top: 1px solid var(--card-border); padding-top: 16px;">
+          <h3 style="font-size: 1rem; font-weight: 700; margin-bottom: 10px;">🌟 Custom Friend Meals</h3>
+          <div id="customMealsList" class="meal-cards-grid"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 4: WHAT TO EAT & WHAT TO AVOID (TRAFFIC LIGHT GUIDE) -->
+    <section id="tab-guide" class="tab-pane">
+      <div class="card">
+        <h2 class="card-title">🚦 Simple "Traffic Light" Food Guide</h2>
+        <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 16px;">
+          The easiest way to remember what to put on the plate without counting strict calories.
+        </p>
+
+        <!-- Green: Eat Freely -->
+        <div class="traffic-column green-box">
+          <div class="traffic-title" style="color: #059669;">
+            <span>🟢</span> EAT FREELY (Every Day Staple)
+          </div>
+          <ul class="traffic-list" id="greenFoodList">
+            <!-- Populated by JS -->
+          </ul>
+        </div>
+
+        <!-- Yellow: In Moderation -->
+        <div class="traffic-column yellow-box">
+          <div class="traffic-title" style="color: #d97706;">
+            <span>🟡</span> ENJOY IN MODERATION (Portion Control)
+          </div>
+          <ul class="traffic-list" id="yellowFoodList">
+            <!-- Populated by JS -->
+          </ul>
+        </div>
+
+        <!-- Red: Limit / Avoid -->
+        <div class="traffic-column red-box">
+          <div class="traffic-title" style="color: #dc2626;">
+            <span>🔴</span> LIMIT OR AVOID (Slows Down Progress)
+          </div>
+          <ul class="traffic-list" id="redFoodList">
+            <!-- Populated by JS -->
+          </ul>
+        </div>
+
+        <!-- Golden Rules for Friend -->
+        <div style="margin-top: 18px; padding: 14px; background: var(--bg); border-radius: var(--radius-sm);">
+          <h3 style="font-size: 0.95rem; font-weight: 700; margin-bottom: 8px;">🌟 4 Golden Rules for Eating Well:</h3>
+          <ol style="font-size: 0.85rem; color: var(--text-muted); padding-left: 20px; line-height: 1.6;">
+            <li><strong>Drink 1 glass of water before each meal:</strong> Helps digestion and prevents overeating.</li>
+            <li><strong>Eat until 80% full:</strong> Give your stomach 15 minutes to signal fullness to the brain.</li>
+            <li><strong>Include protein in every main meal:</strong> Keeps you energetic and prevents sugar cravings.</li>
+            <li><strong>Don't skip dinner:</strong> Keep it light, eat 2 hours before bed for sound sleep.</li>
+          </ol>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 5: QUICK RECIPES -->
+    <section id="tab-recipes" class="tab-pane">
+      <div class="card">
+        <h2 class="card-title">🍲 5-Minute Healthy Recipes for Friend</h2>
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 16px;">
+          Fast, effortless recipes anyone can make with minimal cooking skills.
+        </p>
+        <div id="recipeCardsContainer">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 6: FRIEND PROFILE & SETTINGS -->
+    <section id="tab-profile" class="tab-pane">
+      <div class="card">
+        <h2 class="card-title">⚙️ Personalize App for Your Friend</h2>
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 18px;">
+          Set your friend's name and goals so the app feels made especially for them.
+        </p>
+
+        <form id="profileForm">
+          <div class="form-group">
+            <label class="form-label" for="inputFriendName">Friend's Name:</label>
+            <input type="text" id="inputFriendName" class="form-input" placeholder="e.g. Alex, Sam, John" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="selectFriendGoal">Main Fitness Goal:</label>
+            <select id="selectFriendGoal" class="form-select">
+              <option value="get_fit">Balanced Fitness & Energy</option>
+              <option value="lose_weight">Fat Loss & Leanness</option>
+              <option value="build_strength">Tone & Muscle Building</option>
+              <option value="clean_eating">Healthy Vegetarian Diet</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="inputWaterGoal">Daily Water Target (Glasses):</label>
+            <input type="number" id="inputWaterGoal" class="form-input" min="4" max="15" value="8">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="inputFriendNotes">Personal Motivational Note from You to Them:</label>
+            <textarea id="inputFriendNotes" class="form-textarea" rows="3" placeholder="Write an encouraging message..."></textarea>
+          </div>
+
+          <div style="display: flex; gap: 10px; margin-top: 18px;">
+            <button type="submit" class="btn btn-primary">💾 Save Profile</button>
+            <button type="button" id="btnResetAllData" class="btn btn-outline" style="color: #ef4444; border-color: #fca5a5;">
+              ⚠️ Reset All App Data
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Quick Export / Share Card -->
+      <div class="card">
+        <h3 class="card-title">📤 Share or Print Routine</h3>
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 12px;">
+          Print this page or save it as a PDF so your friend can stick it on their fridge or gym wall.
+        </p>
+        <button id="btnPrintPlan" class="btn btn-accent btn-sm">🖨️ Print / Save Plan</button>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- WORKOUT INTERACTIVE PLAYER MODAL -->
+  <div class="modal-overlay" id="workoutPlayerModal">
+    <div class="modal-dialog">
+      <button class="modal-close-btn" id="btnClosePlayer" title="Close player">✕</button>
+      <div id="playerContent">
+        <div style="font-size: 0.8rem; font-weight: 700; color: var(--primary);" id="playerRoutineBadge">ROUTINE</div>
+        <h2 style="font-size: 1.3rem; margin: 4px 0 8px 0;" id="playerExerciseName">Exercise Name</h2>
+        <div style="font-size: 2.2rem; margin: 6px 0;" id="playerExerciseIcon">⚡</div>
+        <p style="font-size: 0.85rem; color: var(--text-muted); min-height: 40px;" id="playerExerciseInstruction">
+          Instruction details...
+        </p>
+
+        <!-- Big Countdown Timer -->
+        <div class="timer-circle" id="timerCircleElement">
+          <div class="timer-seconds" id="playerTimerDisplay">30</div>
+          <div class="timer-label" id="playerTimerStateLabel">SECONDS REMAINING</div>
+        </div>
+
+        <div style="font-size: 0.85rem; color: var(--text-muted); margin-top: 6px;">
+          <span id="playerProgressText">Exercise 1 of 6</span> • <span id="playerRepsHint">Target: 10-12 reps</span>
+        </div>
+
+        <!-- Controls -->
+        <div class="player-controls">
+          <button id="btnPrevExercise" class="btn btn-outline">⏮️ Prev</button>
+          <button id="btnToggleTimer" class="btn btn-primary btn-lg" style="min-width: 120px;">⏸️ Pause</button>
+          <button id="btnNextExercise" class="btn btn-accent">Next ⏭️</button>
+        </div>
+      </div>
+
+      <!-- Celebration Screen (Shown when routine completes) -->
+      <div id="playerCelebration" style="display: none;">
+        <div style="font-size: 3.5rem; margin-bottom: 8px;">🎉🏆✨</div>
+        <h2 style="font-size: 1.4rem; font-weight: 800; color: var(--primary-dark);">Workout Completed!</h2>
+        <p style="font-size: 0.9rem; color: var(--text-muted); margin: 10px 0 18px 0;">
+          Awesome job! Your friend crushed today's routine. Keep the momentum going!
+        </p>
+        <button id="btnFinishCelebration" class="btn btn-primary btn-lg">Done! Back to Home</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ADD CUSTOM EXERCISE MODAL -->
+  <div class="modal-overlay" id="customExerciseModal">
+    <div class="modal-dialog">
+      <button class="modal-close-btn" id="btnCloseExerciseModal">✕</button>
+      <h2 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 14px;">+ Add Custom Exercise</h2>
+      <form id="customExerciseForm">
+        <div class="form-group">
+          <label class="form-label" for="inputExName">Exercise Name:</label>
+          <input type="text" id="inputExName" class="form-input" placeholder="e.g. Dumbbell Bicep Curls" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="selectExTarget">Target Muscle / Category:</label>
+          <select id="selectExTarget" class="form-select">
+            <option value="Upper Body">Upper Body (Arms / Chest)</option>
+            <option value="Lower Body">Lower Body (Legs / Glutes)</option>
+            <option value="Core & Abs">Core & Abs</option>
+            <option value="Cardio">Cardio & Stamina</option>
+            <option value="Stretch">Stretch & Flexibility</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="inputExDuration">Duration (Seconds):</label>
+          <input type="number" id="inputExDuration" class="form-input" value="40" min="10" max="300">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="inputExReps">Reps / Sets Recommendation:</label>
+          <input type="text" id="inputExReps" class="form-input" placeholder="e.g. 3 sets of 10 reps">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="inputExInstruction">Short Instructions:</label>
+          <textarea id="inputExInstruction" class="form-textarea" rows="2" placeholder="Simple tip or how to do it safely"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary" style="width: 100%;">Add to Workout List</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ADD CUSTOM MEAL MODAL -->
+  <div class="modal-overlay" id="customMealModal">
+    <div class="modal-dialog">
+      <button class="modal-close-btn" id="btnCloseMealModal">✕</button>
+      <h2 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 14px;">+ Add Custom Meal for Friend</h2>
+      <form id="customMealForm">
+        <div class="form-group">
+          <label class="form-label" for="selectMealType">Meal Type:</label>
+          <select id="selectMealType" class="form-select">
+            <option value="Breakfast">Breakfast 🌅</option>
+            <option value="Lunch">Lunch ☀️</option>
+            <option value="Snack">Healthy Snack 🍎</option>
+            <option value="Dinner">Dinner 🌙</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="inputMealName">Meal / Dish Name:</label>
+          <input type="text" id="inputMealName" class="form-input" placeholder="e.g. Grilled Chicken Wrap" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="inputMealDesc">Ingredients & Description:</label>
+          <textarea id="inputMealDesc" class="form-textarea" rows="2" placeholder="What's in it and how to eat it"></textarea>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="inputMealCalories">Estimated Calories / Protein:</label>
+          <input type="text" id="inputMealCalories" class="form-input" placeholder="e.g. ~350 kcal • 25g protein">
+        </div>
+        <button type="submit" class="btn btn-primary" style="width: 100%;">Save to Friend's Food Menu</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toastNotification" class="toast">Action completed!</div>
+
+  <!-- Scripts -->
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
